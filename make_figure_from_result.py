@@ -46,6 +46,29 @@ def main():
     for i in range(cluster_num1):
         for j in range(cluster_num2):
             mat[i,j] = np.random.rand()
+    
+    ## Calculate theta
+    original_R = np.zeros([K,L])
+    input_file = 'data/Simulation_data.txt'
+    data = open(input_file, 'r')
+    data.readline()
+    for k in range(K):
+        line = data.readline()
+        R_list = line.split()
+        for l in range(L):
+            original_R[k,l] = int(R_list[l])
+
+    theta_sum = np.zeros([cluster_num1, cluster_num2])
+    theta = np.zeros([cluster_num1, cluster_num2])
+    for k in range(K):
+        i = S1[k]
+        for l in range(L):
+            j = S2[l]
+            theta[i,j] += original_R[k,l]
+            theta_sum[i,j] += 1
+    for i in range(cluster_num1):
+        for j in range(cluster_num2):
+            theta[i,j] /= theta_sum[i,j]
 
     ## draw
     aligned_R = np.zeros([K,L])
@@ -53,9 +76,9 @@ def main():
         for l in range(L):
             i = S1[k]
             j = S2[l]
-            aligned_R[make_simulation_data.trans(k, S1, Table1), make_simulation_data.trans(l, S2, Table2)] = mat[i,j]
+            aligned_R[make_simulation_data.trans(k, S1, Table1), make_simulation_data.trans(l, S2, Table2)] = theta[i,j]
     fig_aligned_R = sns.heatmap(aligned_R, cmap = 'magma')
-    sns.plt.savefig('result/aligned_R_clustering.png')
+    sns.plt.savefig('result/aligned_R_theta.png')
     plt.close()
 
     ## Predicted_rate

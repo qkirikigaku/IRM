@@ -102,9 +102,9 @@ def main():
         for l in range(L):
             i = S1[k]
             j = S2[l]
-            aligned_R_ij[trans(k, S1, Table1), trans(l, S2, Table2)] = mat[i,j]
+            aligned_R_ij[trans(k, S1, Table1), trans(l, S2, Table2)] = theta[i,j]
     fig_aligned_R_ij = sns.heatmap(aligned_R_ij, cmap='magma')
-    sns.plt.savefig('data/aligned_R_clustering.png')
+    sns.plt.savefig('data/aligned_R_theta.png')
     plt.close()
 
 def trans(index, Seq, Table):

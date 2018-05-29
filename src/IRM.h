@@ -137,10 +137,11 @@ void IRM::initialize(){
     for (int l=0; l < L; l++){
         Sl[l] = cast();
     }
+    temp_Sk = Sk; temp_Sl = Sl; New_Sk = Sk; New_Sl = Sl;
     Table_k.resize(START_TABLE_NUM); temp_Table_k.resize(START_TABLE_NUM);
     Table_l.resize(START_TABLE_NUM); temp_Table_l.resize(START_TABLE_NUM);
     Update_table(Sk, Table_k, cluster_num_I); Update_table(Sl, Table_l, cluster_num_J);
-    temp_Sk = Sk; temp_Sl = Sl; New_Sk = Sk; New_Sl = Sl;
+    Update_table(temp_Sk, temp_Table_k, temp_cluster_num_I); Update_table(temp_Sl, temp_Table_l, temp_cluster_num_J);
     log_sampler_Sk.resize(K); log_sampler_Sl.resize(L);
     for (int k=0; k < K; k++){
         log_sampler_Sk[k].resize(cluster_num_I);
@@ -214,7 +215,7 @@ void IRM::Collapsed_Gibbs_sampling(){
     Calc_posterior(); PRINT("initial_log_max_posterior", temp_log_max_posterior);
     old_log_max_posterior = temp_log_max_posterior;
     PRINT_VEC("Initial_Sk", Sk); PRINT_VEC("Initial_Sl", Sl); cout << endl;
-    for(int iter=0; iter < 100; iter++){
+    for(int iter=1; iter < 200; iter++){
         PRINT("Iter", iter);
         Update_belonged_cluster();
         PRINT("update belonged cluster.", "ok");
